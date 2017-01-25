@@ -8,6 +8,7 @@ and updates the other entries based on the models position value.
 
 * [Installation](#installation)
 * [Usage](#usage)
+    * [Migration example](#migration-example)
     * [Events](#events)
         * [Positioning](#positioning)
         * [Positioned](#positioned)
@@ -30,8 +31,8 @@ composer require pion/laravel-eloquent-position
 1. Add a `position` (can be custom) column in your table (model)
 2. Add `PositionTrait` into your model (if you are using custom column set the `$positionColumn` property)
 3. If you are using grouped entries (like parent_id and etc), you can set the `$positionGroup` with the column name/names (supports single string or multiple columns)
-4. Add to form the position input (can be input[type=number] and etc) and fill/set the position
-5. When position is null or empty string, the last position will be used
+4. Add to form the position input (can be input[type=number] and etc) and fill/set the position on save
+5. When position is null or empty string, the last position will be used.
 
 **Then you can get your entries sorted:**
 
@@ -47,6 +48,39 @@ If using default column name (position), the value will be converted to numeric 
 
 **Get the position**
 Use the `$model->getPosition()` or use the standard way by using the column name `$model->position`
+
+### Migration example
+
+```php
+public function up()
+    {
+    Schema::table('pages', function (Blueprint $table) {
+        $table->smallInteger('position')->default(0)->after('id');
+    });
+
+    // Update the order pages
+    Artisan::call('model:position', [
+        'model'=> \App\Models\Page\Page::class
+    ]);
+}
+```
+
+### Model example
+
+```php
+class Page extends Model
+{
+    use PositionTrait;
+
+    public $table = 'pages';
+    public $positionGroup = ['parent_slug'];
+
+    protected $fillable = [
+        'title', 'slug', 'parent_slug', 'content', 'description', 'position'
+    ];
+    
+}
+```
 
 ### Events
 You can listen to events for positioning changes. You can use the `PositionEventsTrait` for easy model registration.

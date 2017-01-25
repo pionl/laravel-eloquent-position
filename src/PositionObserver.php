@@ -48,7 +48,7 @@ class PositionObserver
             $oldPosition = $model->getOriginal($model->getPositionColumn());
 
             // Check if the position is set
-            if (is_null($position)) {
+            if (is_null($position) || $position == '') {
                 $this->appendLast($model, $oldPosition);
             } else {
                 $this->move($model, $position, $oldPosition);

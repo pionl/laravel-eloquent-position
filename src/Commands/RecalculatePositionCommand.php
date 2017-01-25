@@ -1,5 +1,4 @@
 <?php
-
 namespace Pion\Support\Eloquent\Position\Commands;
 
 use Pion\Support\Eloquent\Position\Traits\PositionTrait;
