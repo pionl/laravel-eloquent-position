@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Pion\Support\Eloquent\Position\Commands;
 
 use Pion\Support\Eloquent\Position\Traits\PositionTrait;
 use Illuminate\Console\Command;
