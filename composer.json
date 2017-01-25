@@ -1,0 +1,27 @@
+{
+  "name": "pion/laravel-eloquent-position",
+  "description": "Position logic for Eloquent models with minimum setup",
+  "require": {
+    "laravel/framework": "5.1.* || 5.2.* || 5.3.*"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "2.*"
+  },
+  "scripts": {
+    "lint": "./vendor/bin/phpcs --standard=PSR2 src/",
+    "lint-fix": "./vendor/bin/phpcbf --standard=PSR2 src/"
+  },
+  "autoload": {
+    "psr-4": {
+      "Pion\\Support\\Eloquent\\Position\\": "src/"
+    }
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Martin Kluska",
+      "email": "martin.kluska@imakers.cz"
+    }
+  ],
+  "minimum-stability": "stable"
+}
