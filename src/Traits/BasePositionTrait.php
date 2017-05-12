@@ -1,4 +1,5 @@
 <?php
+
 namespace Pion\Support\Eloquent\Position\Traits;
 
 /**
@@ -120,5 +121,27 @@ trait BasePositionTrait
         return $this;
     }
 
+    //endregion
+
+    //region Override of attribute set for options
+    /**
+     * Enables setting disablePositionUpdate option in runtime
+     *
+     * @param boolean $value
+     */
+    public function setDisablePositionUpdateAttribute($value)
+    {
+        $this->optionCache['disablePositionUpdate'] = $value;
+    }
+
+    /**
+     * Enables setting positionColumn option in runtime
+     *
+     * @param string $value
+     */
+    public function setPositionColumnAttribute($value)
+    {
+        $this->optionCache['positionColumn'] = $value;
+    }
     //endregion
 }
