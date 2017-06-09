@@ -65,7 +65,7 @@ class RecalculatePositionCommand extends Command
             /** @var PositionTrait|Model $model */
             foreach ($collection as $model) {
                 // Prevent the move action and force the position we set
-                $model->disablePositionUpdate = true;
+                $model->setDisablePositionUpdateAttribute(true);
 
                 // Builds the group key to get position
                 $groupKey = $this->buildGroupKeyForPosition($model, $groups);
