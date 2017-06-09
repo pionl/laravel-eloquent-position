@@ -33,6 +33,7 @@ composer require pion/laravel-eloquent-position
 3. If you are using grouped entries (like parent_id and etc), you can set the `$positionGroup` with the column name/names (supports single string or multiple columns)
 4. Add to form the position input (can be input[type=number] and etc) and fill/set the position on save
 5. When position is null or empty string, the last position will be used.
+6. If you are not using migration (the column exists), run the php artisian model:position` command to fix current entries (it will create correct order)
 
 **Then you can get your entries sorted:**
 

@@ -13,7 +13,7 @@ class RecalculatePositionCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'model:position {model} ';
+    protected $signature = 'model:position {model}';
 
     /**
      * The console command description.
@@ -64,6 +64,9 @@ class RecalculatePositionCommand extends Command
         $modelClass::sorted()->chunk(200, function (Collection $collection) use ($groups, &$positionsByGroup) {
             /** @var PositionTrait|Model $model */
             foreach ($collection as $model) {
+                // Prevent the move action and force the position we set
+                $model->disablePositionUpdate = true;
+
                 // Builds the group key to get position
                 $groupKey = $this->buildGroupKeyForPosition($model, $groups);
 
