@@ -1,16 +1,14 @@
 <?php
 namespace Pion\Support\Eloquent\Position\Query;
 
-use Pion\Support\Eloquent\Position\Traits\PositionTrait;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Pion\Support\Eloquent\Position\Traits\PositionTrait;
 
-class PositionQuery extends AbstractPositionQuery
-{
+class PositionQuery extends AbstractPositionQuery {
     /**
-     * @var bool
+     * @var string
      */
-    protected $increment = false;
+    protected $position = null;
 
     /**
      * @var string
@@ -18,70 +16,30 @@ class PositionQuery extends AbstractPositionQuery
     protected $positionColumn = null;
 
     /**
-     * @var int
+     * When only the new model is updated, we don`t need to run query
+     * @var bool
      */
-    protected $position;
+    protected $shouldRunQuery = false;
 
     /**
-     * Comparision condition for old position value.
-     * In default is for decrement.
-     * @var string
-     */
-    protected $oldComparisionCondition = '>';
-    /**
-     * Comparision condition for new position value.
-     * In default is for decrement.
-     * @var string
-     */
-    protected $newComparisionCondition = '<=';
-
-
-    /**
-     * PositionQuery constructor.
+     * Creates the base query and builds the query
      *
      * @param Model|PositionTrait $model
-     * @param int                 $position
-     * @param int                 $oldPosition
      */
-    public function __construct($model, $position, $oldPosition)
+    public function __construct($model, $position)
     {
-        parent::__construct($model, $oldPosition, false);
-
+        // Store the new position
         $this->position = $position;
 
-        // Indicate if si the increment/decrement
-        $this->increment = $position < $oldPosition;
-
-        // Get the column for position to build correct query
+        // Get the position column
         $this->positionColumn = $model->getPositionColumn();
 
-        // Build the comparision condition
-        $this->buildComparisionCondition();
-
-        // Prepare the query
-        $this->query = $this->buildQuery();
-    }
-
-    //region Query
-
-    /**
-     * Runs the increment/decrement query
-     *
-     * @param Builder $query
-     *
-     * @return int
-     */
-    public function runQuery($query)
-    {
-        if ($this->increment) {
-            return $query->increment($this->positionColumn);
-        } else {
-            return $query->decrement($this->positionColumn);
-        }
+        // Build the query
+        parent::__construct($model, null, true);
     }
 
     /**
-     * Builds the basic query with where condition (includes the position conditions)
+     * Builds the basic query and appends a where conditions for group is set
      * @return Builder
      */
     protected function buildQuery()
@@ -89,31 +47,41 @@ class PositionQuery extends AbstractPositionQuery
         // Create query
         $query = parent::buildQuery();
 
-        // Build the where condition for the position. This will ensure to update only required rows
-        return $query->where($this->positionColumn, $this->oldComparisionCondition, $this->oldPosition)
-                    ->where($this->positionColumn, $this->newComparisionCondition, $this->position);
-    }
+        // Get the last position and move the position
+        $lastPosition = $query->max($this->positionColumn);
 
-    /**
-     * Builds the correct comparision condition
-     */
-    protected function buildComparisionCondition()
-    {
-        if ($this->increment) {
-            $this->oldComparisionCondition = '<';
-            $this->newComparisionCondition = '>=';
+        // If the new position is last position, just update the position or if
+        // new position is out of bounds
+        if ($this->position >= $lastPosition) {
+            $this->model()->setPosition($lastPosition + 1);
+        } else {
+            $this->shouldRunQuery = true;
+
+            // Set the forced position
+            $this->model()->setPosition($this->position);
+
+            // Move other models
+            $query->where($this->positionColumn, '>=', $this->position);
         }
-    }
-    //endregion
 
-    //region Getters
+        return $query;
+    }
+
 
     /**
-     * @return mixed
+     * Runs the query for last position and sets the model position if the position has
+     * changed
+     *
+     * @param Builder $query
+     *
+     * @return int the last position returned
      */
-    public function position()
+    public function runQuery($query)
     {
-        return $this->position;
+        if ($this->shouldRunQuery) {
+            return $query->increment($this->positionColumn);
+        }
+
+        return $this->model()->getPosition();
     }
-    //endregion
 }

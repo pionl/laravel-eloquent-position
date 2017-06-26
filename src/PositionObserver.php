@@ -1,9 +1,11 @@
 <?php
+
 namespace Pion\Support\Eloquent\Position;
 
 use Pion\Support\Eloquent\Position\Query\AbstractPositionQuery;
 use Pion\Support\Eloquent\Position\Query\LastPositionQuery;
 use Pion\Support\Eloquent\Position\Query\PositionQuery;
+use Pion\Support\Eloquent\Position\Query\MoveQuery;
 use Pion\Support\Eloquent\Position\Traits\PositionTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -50,10 +52,28 @@ class PositionObserver
             // Check if the position is set
             if (is_null($position) || $position == '') {
                 $this->appendLast($model, $oldPosition);
+            } else if (is_null($oldPosition)) {
+                $this->forcedPosition($model, $position);
             } else {
                 $this->move($model, $position, $oldPosition);
             }
         }
+    }
+
+    /**
+     * Forces the new position, will be overriden if it's out of maximum bounds.
+     *
+     * @param Model|PositionTrait $model
+     * @param int                 $position
+     * @param int|null            $oldPosition
+     */
+    protected function forcedPosition($model, $position, $oldPosition = null)
+    {
+        // Build the new position
+        $query = new PositionQuery($model, $position);
+
+        // Run the query
+        $query->runQuery($query, $oldPosition);
     }
 
     /**
@@ -83,7 +103,7 @@ class PositionObserver
         // Check if the position has change and we need to recalculate
         if ($oldPosition != $position) {
             // Build the position query
-            $query = new PositionQuery($model, $position, $oldPosition);
+            $query = new MoveQuery($model, $position, $oldPosition);
 
             // Run the position query
             $this->runQuery($query, $oldPosition);

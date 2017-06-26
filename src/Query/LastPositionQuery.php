@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class LastPositionQuery extends AbstractPositionQuery
 {
-
     /**
      * Creates the base query and builds the query
      *

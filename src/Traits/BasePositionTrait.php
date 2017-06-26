@@ -128,26 +128,20 @@ trait BasePositionTrait
      * Enables setting disablePositionUpdate option in runtime
      *
      * @param boolean $value
-     *
-     * @return $this
      */
     public function setDisablePositionUpdateAttribute($value)
     {
         $this->optionCache['disablePositionUpdate'] = $value;
-        return $this;
     }
 
     /**
      * Enables setting positionColumn option in runtime
      *
      * @param string $value
-     *
-     * @return $this
      */
     public function setPositionColumnAttribute($value)
     {
         $this->optionCache['positionColumn'] = $value;
-        return $this;
     }
     //endregion
 }
