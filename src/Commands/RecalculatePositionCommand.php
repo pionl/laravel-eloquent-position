@@ -1,4 +1,5 @@
 <?php
+
 namespace Pion\Support\Eloquent\Position\Commands;
 
 use Pion\Support\Eloquent\Position\Traits\PositionTrait;
@@ -106,7 +107,7 @@ class RecalculatePositionCommand extends Command
     /**
      * Builds the group key from the group columns and the values form the model
      *
-     * @param Model|PositionTrait $model
+     * @param Model|PositionTrait $model  The eloquent model
      * @param array               $groups
      *
      * @return string

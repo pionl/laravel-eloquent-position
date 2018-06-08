@@ -52,7 +52,7 @@ class PositionObserver
             // Check if the position is set
             if (is_null($position) || $position == '') {
                 $this->appendLast($model, $oldPosition);
-            } else if (is_null($oldPosition)) {
+            } elseif (is_null($oldPosition)) {
                 $this->forcedPosition($model, $position);
             } else {
                 $this->move($model, $position, $oldPosition);

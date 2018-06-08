@@ -1,10 +1,12 @@
 <?php
+
 namespace Pion\Support\Eloquent\Position\Query;
 
 use Illuminate\Database\Eloquent\Model;
 use Pion\Support\Eloquent\Position\Traits\PositionTrait;
 
-class PositionQuery extends AbstractPositionQuery {
+class PositionQuery extends AbstractPositionQuery
+{
     /**
      * @var string
      */
