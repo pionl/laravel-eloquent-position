@@ -1,4 +1,5 @@
 <?php
+
 namespace Pion\Support\Eloquent\Position\Traits;
 
 use Pion\Support\Eloquent\Position\PositionObserver;
@@ -8,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Trait PositionTrait
  *
+ * @property mixed        defaultPositionValue  Setup default value
  * @property array        attributes
  * @property string       positionColumn        to enable overriding for the position column
  * @property boolean      disablePositionUpdate disables the updated of other entries

@@ -142,6 +142,7 @@ You can set:
 * *string* `positionColumn` *to enable overriding for the position column*
 * *boolean* `disablePositionUpdate` *disables the updated of other entries*
 * *string|array* `positionGroup` *builds a filter from columns for position calculation. Supports single column or multiple columns*
+* *string* `defaultPositionValue` *allows returning different value when position is empty string or null. Default value is null*
  
 #### PositionScopeTrait
 

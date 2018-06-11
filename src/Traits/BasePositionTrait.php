@@ -48,7 +48,8 @@ trait BasePositionTrait
     protected function setPositionAttribute($value)
     {
         // Convert to numeric value if needed
-        $finalValue = is_null($value) || $value === '' ? null : intval($value);
+        $finalValue = is_null($value) || $value === '' ?
+            $this->positionOption('defaultPositionValue', null) : intval($value);
 
         $this->attributes['position'] = $finalValue;
     }
