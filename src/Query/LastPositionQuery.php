@@ -40,7 +40,7 @@ class LastPositionQuery extends AbstractPositionQuery
         $lastPosition = $query->max($this->model()->getPositionColumn()) ?: 0;
 
         // Check if the last position is not same as original position - the same object
-        if ($lastPosition !== $this->oldPosition) {
+        if (empty($this->oldPosition) || $lastPosition != $this->oldPosition) {
             $this->model()->setPosition($lastPosition + 1);
         }
 
