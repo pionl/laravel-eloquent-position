@@ -1,10 +1,13 @@
 # Laravel eloquent model position
-Position logic for Eloquent models with minimum setup. Before saving it will check if the position has changed
-and updates the other entries based on the models position value.
 
 [![Total Downloads](https://poser.pugx.org/pion/laravel-eloquent-position/downloads?format=flat)](https://packagist.org/packages/pion/laravel-eloquent-position)
 [![Latest Stable Version](https://poser.pugx.org/pion/laravel-eloquent-position/v/stable?format=flat)](https://packagist.org/packages/pion/laravel-eloquent-position)
 [![Latest Unstable Version](https://poser.pugx.org/pion/laravel-eloquent-position/v/unstable?format=flat)](https://packagist.org/packages/pion/laravel-eloquent-position)
+
+
+Position logic for Eloquent models with minimum setup. Before saving it will check if the position has changed
+and updates the other entries based on the models position value.
+
 
 * [Installation](#installation)
 * [Usage](#usage)
@@ -19,6 +22,8 @@ and updates the other entries based on the models position value.
 * [Contribution](#contribution)
 
 ## Installation
+
+> Tested in Laravel 5.3 - 5.6, should work in all 5.* releases
 
 **Install via composer**
 

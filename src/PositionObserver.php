@@ -73,7 +73,7 @@ class PositionObserver
         $query = new PositionQuery($model, $position);
 
         // Run the query
-        $query->runQuery($query, $oldPosition);
+        $this->runQuery($query, $oldPosition);
     }
 
     /**
@@ -123,7 +123,7 @@ class PositionObserver
         $eventResponse = $this->firePositioningEvent($query);
 
         // Ignore updating the position and revert the position to original value
-        if ($eventResponse !== $eventResponse && $eventResponse === false) {
+        if ($eventResponse === false) {
             // Update the new position to original position
             $query->model()->setPosition($oldPosition);
         } else {

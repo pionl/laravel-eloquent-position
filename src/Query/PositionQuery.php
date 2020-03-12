@@ -2,6 +2,7 @@
 
 namespace Pion\Support\Eloquent\Position\Query;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Pion\Support\Eloquent\Position\Traits\PositionTrait;
 
@@ -27,6 +28,7 @@ class PositionQuery extends AbstractPositionQuery
      * Creates the base query and builds the query
      *
      * @param Model|PositionTrait $model
+     * @param int                 $position
      */
     public function __construct($model, $position)
     {
