@@ -23,7 +23,7 @@ and updates the other entries based on the models position value.
 
 ## Installation
 
-> Tested in Laravel 5.1 - 5.7, should work in all 5.* releases
+> Tested in Laravel 5.1 - 5.7, should work in all 5.*/6.* releases
 
 **Install via composer**
 
