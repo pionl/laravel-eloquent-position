@@ -62,24 +62,25 @@ class RecalculatePositionCommand extends Command
         $groups = $model->getPositionGroup();
 
         // Run sorted query for every entry
-        $modelClass::sorted()->chunk(200, function (Collection $collection) use ($groups, &$positionsByGroup) {
-            /** @var PositionTrait|Model $model */
-            foreach ($collection as $model) {
-                // Builds the group key to get position
-                $groupKey = $this->buildGroupKeyForPosition($model, $groups);
+        $modelClass::sorted()
+            ->chunk(200, function (Collection $collection) use ($groups, &$positionsByGroup) {
+                /** @var PositionTrait|Model $model */
+                foreach ($collection as $model) {
+                    // Builds the group key to get position
+                    $groupKey = $this->buildGroupKeyForPosition($model, $groups);
 
-                // Set the new position
-                $model->setPosition($this->getPositionForGroup($groupKey, $positionsByGroup))
-                    ->save();
-            }
-        });
+                    // Set the new position
+                    $model->setPosition($this->getPositionForGroup($groupKey, $positionsByGroup))
+                        ->save();
+                }
+            });
 
         // Render the table layout about the positions
         $this->table([
             'Group', 'Last position'
-        ], collect($positionsByGroup)->map(function ($value, $key) {
+        ], array_map(function ($value, $key) {
             return [$key, $value];
-        }));
+        }, $positionsByGroup));
 
         return true;
     }
@@ -107,7 +108,7 @@ class RecalculatePositionCommand extends Command
     /**
      * Builds the group key from the group columns and the values form the model
      *
-     * @param Model|PositionTrait $model  The eloquent model
+     * @param Model|PositionTrait $model The eloquent model
      * @param array               $groups
      *
      * @return string

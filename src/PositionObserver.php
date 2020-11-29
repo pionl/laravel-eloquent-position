@@ -42,7 +42,7 @@ class PositionObserver
      */
     public function saving($model)
     {
-        if (!$model->isPositionUpdateDisabled()) {
+        if ($model->isPositionUpdateDisabled() === false) {
             // Get the position for current and old value
             $position = $model->getPosition();
 
@@ -61,7 +61,23 @@ class PositionObserver
     }
 
     /**
-     * Forces the new position, will be overriden if it's out of maximum bounds.
+     * Updates the position before saving
+     *
+     * @param Model|PositionTrait $model
+     */
+    public function deleted($model)
+    {
+        if ($model->isPositionUpdateDisabled() === false) {
+            // Get the old position
+            $oldPosition = $model->getOriginal($model->getPositionColumn());
+
+            // Append deleted model as last to re-index other models
+            $this->appendLast($model, $oldPosition);
+        }
+    }
+
+    /**
+     * Forces the new position, will be overridden if it's out of maximum bounds.
      *
      * @param Model|PositionTrait $model
      * @param int                 $position

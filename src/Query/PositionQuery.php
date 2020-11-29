@@ -52,11 +52,11 @@ class PositionQuery extends AbstractPositionQuery
         $query = parent::buildQuery();
 
         // Get the last position and move the position
-        $lastPosition = $query->max($this->positionColumn);
+        $lastPosition = $query->max($this->positionColumn) ?: 0;
 
         // If the new position is last position, just update the position or if
         // new position is out of bounds
-        if ($this->position >= $lastPosition) {
+        if ($this->position > $lastPosition) {
             $this->model()->setPosition($lastPosition + 1);
         } else {
             $this->shouldRunQuery = true;

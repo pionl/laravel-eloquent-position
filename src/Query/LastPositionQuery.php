@@ -1,4 +1,5 @@
 <?php
+
 namespace Pion\Support\Eloquent\Position\Query;
 
 use Pion\Support\Eloquent\Position\Traits\PositionTrait;
@@ -19,7 +20,7 @@ class LastPositionQuery extends AbstractPositionQuery
      * Creates the base query and builds the query
      *
      * @param Model|PositionTrait $model
-     * @param int                 $oldPosition
+     * @param int|null            $oldPosition
      */
     public function __construct($model, $oldPosition)
     {
@@ -39,8 +40,10 @@ class LastPositionQuery extends AbstractPositionQuery
         // Get the last position and move the position
         $lastPosition = $query->max($this->model()->getPositionColumn()) ?: 0;
 
-        // Check if the last position is not same as original position - the same object
-        if (empty($this->oldPosition) || $lastPosition != $this->oldPosition) {
+        if (empty($this->oldPosition) === false) {
+            (new MoveQuery($this->model, $lastPosition, $this->oldPosition))->run();
+        } else if ($this->oldPosition === null || $lastPosition != $this->oldPosition) {
+            // Check if the last position is not same as original position - the same object
             $this->model()->setPosition($lastPosition + 1);
         }
 

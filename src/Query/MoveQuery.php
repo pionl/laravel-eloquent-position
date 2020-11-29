@@ -1,4 +1,5 @@
 <?php
+
 namespace Pion\Support\Eloquent\Position\Query;
 
 use Pion\Support\Eloquent\Position\Traits\PositionTrait;
@@ -23,22 +24,20 @@ class MoveQuery extends AbstractPositionQuery
     protected $position;
 
     /**
-     * Comparision condition for old position value.
+     * Comparison condition for old position value.
      * In default is for decrement.
      * @var string
      */
-    protected $oldComparisionCondition = '>';
+    protected $oldComparisonCondition = '>';
     /**
-     * Comparision condition for new position value.
+     * Comparison condition for new position value.
      * In default is for decrement.
      * @var string
      */
-    protected $newComparisionCondition = '<=';
+    protected $newComparisonCondition = '<=';
 
 
     /**
-     * PositionQuery constructor.
-     *
      * @param Model|PositionTrait $model
      * @param int                 $position
      * @param int|null            $oldPosition
@@ -56,7 +55,7 @@ class MoveQuery extends AbstractPositionQuery
         $this->positionColumn = $model->getPositionColumn();
 
         // Build the comparision condition
-        $this->buildComparisionCondition();
+        $this->buildComparisonCondition();
 
         // Prepare the query
         $this->query = $this->buildQuery();
@@ -76,6 +75,15 @@ class MoveQuery extends AbstractPositionQuery
         if ($this->increment) {
             return $query->increment($this->positionColumn);
         } else {
+            // Get the last position and move the position
+            $lastPosition = $query->max($this->positionColumn) ?: 0;
+
+            // If the set position is out of the bounds of current items, force new position
+            if ($this->position > $lastPosition) {
+                $this->position = $lastPosition;
+                $this->model()->setPosition($this->position);
+            }
+
             return $query->decrement($this->positionColumn);
         }
     }
@@ -90,18 +98,18 @@ class MoveQuery extends AbstractPositionQuery
         $query = parent::buildQuery();
 
         // Build the where condition for the position. This will ensure to update only required rows
-        return $query->where($this->positionColumn, $this->oldComparisionCondition, $this->oldPosition)
-                    ->where($this->positionColumn, $this->newComparisionCondition, $this->position);
+        return $query->where($this->positionColumn, $this->oldComparisonCondition, $this->oldPosition)
+            ->where($this->positionColumn, $this->newComparisonCondition, $this->position);
     }
 
     /**
-     * Builds the correct comparision condition
+     * Builds the correct comparison condition
      */
-    protected function buildComparisionCondition()
+    protected function buildComparisonCondition()
     {
         if ($this->increment) {
-            $this->oldComparisionCondition = '<';
-            $this->newComparisionCondition = '>=';
+            $this->oldComparisonCondition = '<';
+            $this->newComparisonCondition = '>=';
         }
     }
     //endregion

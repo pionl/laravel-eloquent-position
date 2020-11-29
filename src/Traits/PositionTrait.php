@@ -70,7 +70,7 @@ trait PositionTrait
      */
     public function isPositionUpdateDisabled()
     {
-        return $this->positionOption('disablePositionUpdate');
+        return $this->positionOption('disablePositionUpdate', false);
     }
 
     //endregion
