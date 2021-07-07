@@ -70,7 +70,7 @@ class PositionObserver
      *
      * @param Model|PositionTrait $model
      */
-    public function deleted($model)
+    public function deleting($model)
     {
         if ($model->isPositionUpdateDisabled() === false) {
             // Get the old position
