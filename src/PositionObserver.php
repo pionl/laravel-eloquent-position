@@ -45,7 +45,7 @@ class PositionObserver
         if ($model->isPositionUpdateDisabled() === false) {
             // Get the position for current and old value
             $position = $model->getPosition();
-            
+
             // Prevent modifying position column when updating and position columns has not changed
             if ($model->exists === true && $model->isDirty($model->getPositionColumn()) === false) {
                 return;
@@ -70,7 +70,7 @@ class PositionObserver
      *
      * @param Model|PositionTrait $model
      */
-    public function deleting($model)
+    public function deleted($model)
     {
         if ($model->isPositionUpdateDisabled() === false) {
             // Get the old position
